@@ -1,0 +1,107 @@
+unit DTServiceManager;
+
+interface
+
+uses
+  System.SysUtils, System.Classes;
+
+ type TRetorno = record
+      Mensagem:string;
+ end;
+
+ type
+ TGetServicoAtivo   = Function(NomeServico: String): Boolean; stdcall;
+ TFinalizaServico   = Function(NomeServico: string): Boolean; stdcall;
+ TInicializaServico = Function(NomeServico: string; NomeExecutavelServico: string): Boolean;
+
+type
+  TDTServiceManager = class(TComponent)
+  private
+    FCaminhoDLL: string;
+    procedure SetCaminhoDLL(const Value: string);
+  protected
+
+  public
+    Retorno : TRetorno;
+    function StatusServico(NomeServico : string): Boolean;
+    function FinalizaServico(NomeServico : string): Boolean;
+  published
+    property CaminhoDLL:string read FCaminhoDLL write SetCaminhoDLL;
+  end;
+
+procedure Register;
+
+implementation
+
+uses
+  Winapi.Windows;
+
+procedure Register;
+begin
+  RegisterComponents('DT Inovacao', [TDTServiceManager]);
+end;
+
+{ TDTServiceManager }
+
+function TDTServiceManager.FinalizaServico(NomeServico: string): Boolean;
+var
+NomeDLL   : string;
+HandleDLL : THandle;
+Proc      : TFinalizaServico;
+begin
+       try
+           HandleDLL := 0;
+           NomeDLL   := FCaminhoDLL;
+           HandleDLL := LoadLibrary( PChar( NomeDLL ) );
+           if HandleDLL <> 0 then
+           begin
+              @Proc := GetProcAddress(HandleDLL,  'FinalizarServico' );
+              if @Proc <> nil then
+              begin
+                   if Proc( NomeServico ) = True then
+                   begin
+                        Retorno.Mensagem := 'Servico Finalizado';
+                   end else begin
+                        Retorno.Mensagem := 'Servico não Finalizado';
+                   end;
+              end;
+           end;
+       finally
+           FreeLibrary(HandleDLL);
+       end;
+end;
+
+procedure TDTServiceManager.SetCaminhoDLL(const Value: string);
+begin
+  FCaminhoDLL := Value;
+end;
+
+function TDTServiceManager.StatusServico(NomeServico: string): Boolean;
+var
+NomeDLL   : string;
+HandleDLL : THandle;
+Proc      : TGetServicoAtivo;
+begin
+       try
+           HandleDLL := 0;
+           NomeDLL   := FCaminhoDLL;
+           HandleDLL := LoadLibrary( PChar( NomeDLL ) );
+           if HandleDLL <> 0 then
+           begin
+              @Proc := GetProcAddress(HandleDLL,  'ServicoAtivo' );
+              if @Proc <> nil then
+              begin
+                   if Proc( NomeServico ) = True then
+                   begin
+                        Retorno.Mensagem := 'Servico Ativo';
+                   end else begin
+                        Retorno.Mensagem := 'Servico Desativado';
+                   end;
+              end;
+           end;
+       finally
+           FreeLibrary(HandleDLL);
+       end;
+end;
+
+end.

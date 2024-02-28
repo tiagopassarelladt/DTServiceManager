@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/10/17 16:22:24.000.555,=rtl.dcp</Transaction>
+    <Transaction>2022/10/17 16:22:35.000.201,C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\ServiceManagerDLL.dproj=C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2022/10/17 16:23:48.000.087,=D:\Dropbox\Componentes\DTServiceManagerDLL\Componente\DTServiceManager.pas</Transaction>
+    <Transaction>2022/10/17 16:23:54.000.217,D:\Dropbox\Componentes\DTServiceManagerDLL\Componente\ServiceManagerDLL.dproj=C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\ServiceManagerDLL.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
